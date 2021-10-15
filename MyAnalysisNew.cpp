@@ -73,7 +73,7 @@ int wlistlen=0;
 int numofpart=0;
 int operatortype=0;
 int istrue=0;
-int ifbodyindex=0;
+//int ifbodyindex=0;
 
 StringList * headsl=(StringList *)malloc(sizeof(StringList));
 WordList * headctl=(WordList *)malloc(sizeof(WordList));
@@ -546,6 +546,8 @@ void bodydeal(FILE *fp) {
 *
 *  {@param segment}controller部分的链表
 *
+ *
+ *
 * */
 void docon(WordList * segment){
     int isbody=0;
@@ -638,7 +640,14 @@ void docon(WordList * segment){
             }
         }
     } else if (!strcmp(segment->array,"for")){
+        Grammar * tree=(Grammar *)malloc(sizeof(Grammar));
+        tree->array=segment->array;
+        tree->type=Controller;
+        segment=segment->next;
+        roots[trees++]=tree;
+        while (1){
 
+        }
     }
 //    arr[arrindex]='\0';
 }
