@@ -8,15 +8,18 @@
 #include "pthread.h"
 #include "stdarg.h"
 typedef struct {
-    void *(*function)(void * args);
+    void *(*function)(void * arg,...);
     va_list arglist;
     int argnum;
+    void * args[10];
+    void * arg;
+
 }Thread_Pool_task_t;
 
 typedef struct MissionQueue{
     Thread_Pool_task_t * mission;
     struct MissionQueue * next;
-};
+}Missionqueue;
 
 
 
@@ -25,8 +28,8 @@ typedef struct Thread_Pool{
     int thread_alive_num;
     int thread_position_num_max;
 
-    MissionQueue *task_queue;//任务队列
-    MissionQueue *task_queue_index;
+    Missionqueue *task_queue;//任务队列
+    Missionqueue *task_queue_index;
 
 
     pthread_t *threads;
@@ -36,9 +39,14 @@ typedef struct Thread_Pool{
     int pool_empty;
     int poll_filled;
     int queue_index;
+    int working_thread_num;
+    int waiting_thread_num;
 
     pthread_mutex_t submit_lock;
-
-};
-extern Thread_Pool * getInstacneThreadPool(int threadMax,int queueMax);
-extern void Thread_pool_submit(Thread_Pool * threadPool,void *(*function)(void * arg),int argnum,...);
+    pthread_mutex_t wait_for_lock;
+    pthread_mutex_t ops_waiting_thread_num;
+    pthread_mutex_t ops_working_thread_num;
+    pthread_cond_t empty_queue_wait;
+}Threadpool;
+extern Threadpool * getInstacneThreadPool(int threadMax,int queueMax);
+extern void Thread_pool_submit(Threadpool * threadPool,void *(*function)(void * arg),int argnum,...);
