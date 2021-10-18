@@ -145,9 +145,6 @@ void * action_thread(Threadpool * threadPool){// 线程创建之后或处理完�
 
         task->function(task->arglist);
 
-
-
-
         pthread_mutex_unlock(&threadPool->wait_for_lock);
         pthread_mutex_lock(&threadPool->ops_working_thread_num);
         threadPool->working_thread_num--;
